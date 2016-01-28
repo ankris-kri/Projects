@@ -37,8 +37,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Telephone_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,24 +115,10 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Name,
-            this.Telephone_Number});
-            this.dataGridView1.Location = new System.Drawing.Point(35, 178);
+            this.dataGridView1.Location = new System.Drawing.Point(35, 150);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(415, 119);
+            this.dataGridView1.Size = new System.Drawing.Size(452, 150);
             this.dataGridView1.TabIndex = 8;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // Name
-            // 
-            this.Name.HeaderText = "Name";
-            this.Name.Name = "Name";
-            // 
-            // Telephone_Number
-            // 
-            this.Telephone_Number.HeaderText = "Telephone_Number";
-            this.Telephone_Number.Name = "Telephone_Number";
             // 
             // Form1
             // 
@@ -150,7 +134,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Name_Textbox);
             this.Controls.Add(this.label1);
-          //  this.Name = "Form1";
+            this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -168,8 +152,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Telephone_Number;
     }
 }
 

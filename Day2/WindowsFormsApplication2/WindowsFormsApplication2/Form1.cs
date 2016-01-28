@@ -30,11 +30,13 @@ namespace WindowsFormsApplication2
         {
             try
             {
+
                 String _name = Name_Textbox.Text;
                 int _number;
                 if (!(int.TryParse(Number_Textbox.Text, out _number)))
                 {
                     MessageBox.Show("Invalid Number");
+                    Number_Textbox.Clear();
                 }
                 else
                 {
@@ -48,7 +50,24 @@ namespace WindowsFormsApplication2
                         cmd.Parameters.AddWithValue("@name", _name);
                         cmd.Parameters.AddWithValue("@phone", _number);
                         cmd.ExecuteNonQuery();
+
+                        SqlCommand command = new SqlCommand("select * from phone_dir",sq);
+                        var result = command.ExecuteNonQuery();
+                        
+
                     }
+
+                    string connectionString = "Server=localhost;Database=phone_directory;Trusted_Connection=true";
+                    string sql = "SELECT * FROM phone_dir";
+                    SqlConnection connection = new SqlConnection(connectionString);
+                    SqlDataAdapter dataadapter = new SqlDataAdapter(sql, connection);
+                    DataSet ds = new DataSet();
+                    connection.Open();
+                    dataadapter.Fill(ds, "dataGridView1");
+                    connection.Close();
+                    dataGridView1.DataSource = ds;
+                    dataGridView1.DataMember = "dataGridView1";
+
                 }
             }
             catch(Exception e1)
@@ -77,7 +96,10 @@ namespace WindowsFormsApplication2
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if(int.TryParse(textBox3.Text,out _number)
+            {
 
+            }
         }
 
         private void Name_Textbox_TextChanged(object sender, EventArgs e)
