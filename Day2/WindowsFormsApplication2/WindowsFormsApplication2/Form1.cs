@@ -96,24 +96,21 @@ namespace WindowsFormsApplication2
             int _number;
             if(int.TryParse(textBox3.Text,out _number))
             {
+                
+
                 using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
                 {
                     sq.Open();
 
-                    var cmd = new SqlCommand("select * from phone_dir where phone=@phone");
-                    cmd.Connection = sq;
-                    cmd.Parameters.AddWithValue("@phone", _number);
-                    cmd.ExecuteNonQuery();
-                    
-                    //SqlCommand command = new SqlCommand("select * from phone_dir",sq);
-                    // var result = command.ExecuteNonQuery();
-                    Console.WriteLine(cmd);
-                    Console.ReadLine();
-                  
-                  
-                   
-                }
+        
+                    SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from Phone_dir where Phone=@phone", sq);
+                    _dataadapter.SelectCommand.Parameters.AddWithValue("@phone",_number);
+                    DataSet _ds = new DataSet();
+                    _dataadapter.Fill(_ds, "dataGridView1");
 
+                    dataGridView1.DataSource = _ds;
+                    dataGridView1.DataMember = "dataGridView1";
+                }
             }
         }
 
@@ -127,6 +124,7 @@ namespace WindowsFormsApplication2
             using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
             {
                 sq.Open();
+
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
                 DataSet _ds = new DataSet();
                 _dataadapter.Fill(_ds, "dataGridView1");
@@ -134,6 +132,7 @@ namespace WindowsFormsApplication2
                 dataGridView1.DataSource = _ds;
                 dataGridView1.DataMember = "dataGridView1";
             }
+
         }
     }
 }
