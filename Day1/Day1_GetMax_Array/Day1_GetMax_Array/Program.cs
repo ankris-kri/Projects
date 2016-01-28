@@ -12,37 +12,39 @@ namespace Day1_GetMax_Array
     {
         static void Main(string[] args)
         {
-            int _length,_number;
+            int _length,_number,_count=0;
             Console.WriteLine("Enter the length of the array");
             while (!(int.TryParse(Console.ReadLine(), out _length)))
             {
                 Console.WriteLine("please enter a valid input");
                 continue;
             }
-            Array Demo = new Array(_length);
+            IntArray demo = new IntArray(_length);
             Console.WriteLine("please enter {0} input values", _length);
-            for (int i = 0; i < _length; i++)
-            {
-             
-                while (!(int.TryParse(Console.ReadLine(), out _number)))
+    
+            while (_count!=_length)
+            {   
+                if((!(int.TryParse(Console.ReadLine(), out _number))))
                 {
-
-                    Console.WriteLine("please enter a valid input");
-                    continue;
+                Console.WriteLine("please enter a valid input");
+                continue;
                 }
-                Demo.AddNumber(i, _number);    //method to add values into an array
+                demo.AddNumber(_count, _number);    //method to add values into an array
+                ++_count;
             }
+           
+            
 
-            Console.WriteLine("The Maximum numbers is {0}",Demo.GetMax());   //method to find the maximum number in an array
+            Console.WriteLine("The Maximum numbers is {0}",demo.GetMax());   //method to find the maximum number in an array
             Console.ReadLine();
         }
 
     }
-    class Array
+    class IntArray
     {
 
         int[] _intArray;
-        public Array(int inputLenth)
+        public IntArray(int inputLenth)
         {
             _intArray = new int[inputLenth];
         }
