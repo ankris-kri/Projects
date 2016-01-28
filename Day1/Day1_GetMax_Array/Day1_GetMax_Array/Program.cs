@@ -37,7 +37,7 @@ namespace Day1_GetMax_Array
             
             while(_temp)
             {
-                Console.WriteLine("\nEnter Your preference:\n1)GetArray\n2)Max_Array\n3)Exit");
+                Console.WriteLine("\nEnter Your preference:\n1)GetArray\n2)Max_Array\n3)Min_Array\n4)Sort_Array\n5)Exit");
                 if(!(int.TryParse(Console.ReadLine(),out _preference)))
                 {
                     Console.WriteLine("TRY AGAIN");
@@ -54,9 +54,21 @@ namespace Day1_GetMax_Array
                         Console.Write("\n");
                         break;
                     case 2:
-                        Console.WriteLine("The Maximum numbers is {0}",demo.GetMax());   //method to find the maximum number in an array
+                        Console.WriteLine("The Maximum number is {0}",demo.GetMax());   //method to find the maximum number in an array
                         break;
                     case 3:
+                        Console.WriteLine("The Minimum number is {0}",demo.GetMin());  //minimum number of the array
+                        break;
+                    case 4:
+                        Console.Write("Sorted Array elements are:");
+                        foreach(int local in demo.SortedArray())
+                        {
+                            Console.Write("\t{0}",local.ToString());
+                        }
+                        Console.Write("\n");
+                        break;
+                        
+                    case 5:
                         _temp = false;
                         Console.WriteLine("Thank you");
                         break;
@@ -96,6 +108,37 @@ namespace Day1_GetMax_Array
                     _max = temp;
             }
             return _max;
+        }
+        public int GetMin()
+        {
+            int _min= int.MaxValue ;
+            foreach (int temp in _intArray)
+            {
+                if (temp < _min)
+                    _min = temp;
+            }
+            return _min;
+        }
+        public int[] SortedArray()
+        {
+            int[] _sortArray = new int[_intArray.Length];
+            _intArray.CopyTo(_sortArray, 0);
+            for (int _i = 0; _i < _sortArray.Length; _i++)
+            {
+                for (int _j = _i + 1; _j <_sortArray.Length; _j++)
+                {
+                    if (_sortArray[_i] > _sortArray[_j])
+                    {
+                        int _temp = _sortArray[_i];
+
+                        _sortArray[_i] =  _sortArray[_j];
+
+                       _sortArray[_j] = _temp;
+                    }
+                }
+            }
+            return _sortArray;
+
         }
         public int[] GetArray()
         {
