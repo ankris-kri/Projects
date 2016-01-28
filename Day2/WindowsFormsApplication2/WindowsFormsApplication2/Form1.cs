@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace WindowsFormsApplication2
 {
@@ -17,10 +18,8 @@ namespace WindowsFormsApplication2
             InitializeComponent();
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+       
+      
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -29,7 +28,36 @@ namespace WindowsFormsApplication2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Number_Textbox.Text = Name_Textbox.Text;
+            try
+            {
+                String _name = Name_Textbox.Text;
+                int _number;
+                if (!(int.TryParse(Number_Textbox.Text, out _number)))
+                {
+                    MessageBox.Show("Invalid Number");
+                }
+                else
+                {
+
+                    using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+                    {
+                        sq.Open();
+                       
+                        var cmd = new SqlCommand("Insert into phone_dir values(@name,@phone)");
+                        cmd.Connection = sq;
+                        cmd.Parameters.AddWithValue("@name", _name);
+                        cmd.Parameters.AddWithValue("@phone", _number);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch(Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+
+         
+           
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)

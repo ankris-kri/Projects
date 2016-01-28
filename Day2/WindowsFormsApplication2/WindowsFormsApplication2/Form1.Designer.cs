@@ -72,10 +72,10 @@
             // Number_Textbox
             // 
             this.Number_Textbox.Location = new System.Drawing.Point(208, 42);
+            this.Number_Textbox.MaxLength = 10;
             this.Number_Textbox.Name = "Number_Textbox";
             this.Number_Textbox.Size = new System.Drawing.Size(116, 20);
             this.Number_Textbox.TabIndex = 3;
-            this.Number_Textbox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // button1
             // 
@@ -150,8 +150,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Name_Textbox);
             this.Controls.Add(this.label1);
-            //this.Name = "Form1";
-            //this.Text = "Form1";
+          //  this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
