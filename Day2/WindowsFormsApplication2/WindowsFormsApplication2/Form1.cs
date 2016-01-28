@@ -66,6 +66,8 @@ namespace WindowsFormsApplication2
                
 
                 }
+                Number_Textbox.Clear();
+                Name_Textbox.Clear();
             }
             catch(Exception e1)
             {
@@ -94,24 +96,34 @@ namespace WindowsFormsApplication2
         private void button2_Click(object sender, EventArgs e)
         {
             int _number;
-            if(int.TryParse(textBox3.Text,out _number))
-            {
+            String _name;
+            SqlDataAdapter _dataadapter;
                 
-
-                using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            {
+                sq.Open();
+                if(int.TryParse(textBox3.Text,out _number))
                 {
-                    sq.Open();
-
-        
-                    SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from Phone_dir where Phone=@phone", sq);
+                    
+                    _dataadapter = new SqlDataAdapter("select * from Phone_dir where Phone=@phone", sq);
                     _dataadapter.SelectCommand.Parameters.AddWithValue("@phone",_number);
-                    DataSet _ds = new DataSet();
-                    _dataadapter.Fill(_ds, "dataGridView1");
 
-                    dataGridView1.DataSource = _ds;
-                    dataGridView1.DataMember = "dataGridView1";
                 }
+                else
+                {
+                    _name=textBox3.Text;
+                    _dataadapter = new SqlDataAdapter("select * from Phone_dir where Name=@name", sq);
+                    _dataadapter.SelectCommand.Parameters.AddWithValue("@name",_name);
+                }
+        
+                DataSet _ds = new DataSet();
+                _dataadapter.Fill(_ds, "dataGridView1");
+
+                dataGridView1.DataSource = _ds;
+                dataGridView1.DataMember = "dataGridView1";
             }
+            textBox3.Clear();
+                       
         }
 
         private void Name_Textbox_TextChanged(object sender, EventArgs e)
@@ -133,6 +145,21 @@ namespace WindowsFormsApplication2
                 dataGridView1.DataMember = "dataGridView1";
             }
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            {
+                sq.Open();
+
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
+                DataSet _ds = new DataSet();
+                _dataadapter.Fill(_ds, "dataGridView1");
+
+                dataGridView1.DataSource = _ds;
+                dataGridView1.DataMember = "dataGridView1";
+            }
         }
     }
 }
