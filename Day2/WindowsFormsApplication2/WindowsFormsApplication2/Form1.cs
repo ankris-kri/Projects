@@ -51,22 +51,19 @@ namespace WindowsFormsApplication2
                         cmd.Parameters.AddWithValue("@phone", _number);
                         cmd.ExecuteNonQuery();
 
-                        SqlCommand command = new SqlCommand("select * from phone_dir",sq);
-                        var result = command.ExecuteNonQuery();
-                        
+                        //SqlCommand command = new SqlCommand("select * from phone_dir",sq);
+                       // var result = command.ExecuteNonQuery();
 
+                        
+                        SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir",sq);
+                        DataSet _ds = new DataSet();
+                        _dataadapter.Fill(_ds, "dataGridView1");
+               
+                        dataGridView1.DataSource = _ds;
+                        dataGridView1.DataMember = "dataGridView1";
                     }
 
-                    string connectionString = "Server=localhost;Database=phone_directory;Trusted_Connection=true";
-                    string sql = "SELECT * FROM phone_dir";
-                    SqlConnection connection = new SqlConnection(connectionString);
-                    SqlDataAdapter dataadapter = new SqlDataAdapter(sql, connection);
-                    DataSet ds = new DataSet();
-                    connection.Open();
-                    dataadapter.Fill(ds, "dataGridView1");
-                    connection.Close();
-                    dataGridView1.DataSource = ds;
-                    dataGridView1.DataMember = "dataGridView1";
+               
 
                 }
             }
@@ -96,8 +93,26 @@ namespace WindowsFormsApplication2
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if(int.TryParse(textBox3.Text,out _number)
+            int _number;
+            if(int.TryParse(textBox3.Text,out _number))
             {
+                using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+                {
+                    sq.Open();
+
+                    var cmd = new SqlCommand("select * from phone_dir where phone=@phone");
+                    cmd.Connection = sq;
+                    cmd.Parameters.AddWithValue("@phone", _number);
+                    cmd.ExecuteNonQuery();
+                    
+                    //SqlCommand command = new SqlCommand("select * from phone_dir",sq);
+                    // var result = command.ExecuteNonQuery();
+                    Console.WriteLine(cmd);
+                    Console.ReadLine();
+                  
+                  
+                   
+                }
 
             }
         }
@@ -105,6 +120,20 @@ namespace WindowsFormsApplication2
         private void Name_Textbox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            {
+                sq.Open();
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
+                DataSet _ds = new DataSet();
+                _dataadapter.Fill(_ds, "dataGridView1");
+
+                dataGridView1.DataSource = _ds;
+                dataGridView1.DataMember = "dataGridView1";
+            }
         }
     }
 }
