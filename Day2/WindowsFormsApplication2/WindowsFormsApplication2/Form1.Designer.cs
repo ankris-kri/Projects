@@ -67,7 +67,6 @@
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Number";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // Number_Textbox
             // 

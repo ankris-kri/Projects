@@ -18,10 +18,7 @@ namespace WindowsFormsApplication2
         {
             InitializeComponent();
         }
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -38,23 +35,20 @@ namespace WindowsFormsApplication2
                 }
                 else
                 {
-                    
-                    Business_layer phone_detail = new Business_layer(_name, _number);
-                    String result=phone_detail.ValidateAndAdd();
-                    if (result =="success")
-                        using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
-                        {
-                            sq.Open();
-                            SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
-                            DataTable t = new DataTable();
-                            _dataadapter.Fill(t);
-                            dataGridView1.DataSource = t;
-                            Number_Textbox.Clear();
-                            Name_Textbox.Clear();
-                        }
+                    PhoneDirectory phone = new PhoneDirectory(_name, _number);
+                    BusinessLayer phoneDetail = new BusinessLayer();
+                    bool result=phoneDetail.ValidateAndAdd(phone);
+                    if (result == true)
+                    {    
+                         
+                        dataGridView1.DataSource = phoneDetail.ViewPhone(phone);
+                        Number_Textbox.Clear();
+                        Name_Textbox.Clear();
+                    }
+                        
                     else
                     {
-                        MessageBox.Show(result);
+                        MessageBox.Show("cannot be Added");
 
                     }
                   
@@ -168,54 +162,55 @@ namespace WindowsFormsApplication2
             label4.Visible = false;
         }
     }
-    class Phone_directory
+    class PhoneDirectory
     {
         public string name;
         public int number;
-
-        public Phone_directory(String _LocalName,int _LocalNumber)
+        public PhoneDirectory(String _LocalName,int _LocalNumber)
         {
             name = _LocalName;
             number = _LocalNumber;
         }
 
     }
-    class Business_layer
+    class BusinessLayer
     {
-        private Phone_directory _directory;
+  
+        public PhoneDirectoryRepository repository=new PhoneDirectoryRepository();
 
-        public Business_layer(String _LocalName, int _LocalNumber)
+       
+        public bool ValidateAndAdd(PhoneDirectory phoneDetails)
         {
-            _directory = new Phone_directory(_LocalName, _LocalNumber);
-        }
-        public string ValidateAndAdd()
-        {
-            String _validateResult=ValidatePhone();
-            if (_validateResult=="successfully validated")
+            bool _validateResult=ValidatePhone();
+            if (_validateResult==true)
             {
-                PhoneDirectoryRepository repository = new PhoneDirectoryRepository(_directory);
-                return repository.Add();
+                return repository.Add(phoneDetails);
                    
             }
             else
-                return _validateResult;
+                return false;
            
         }
-        private string ValidatePhone()
+        private bool ValidatePhone()
         {
-            return "successfully validated";
+            return true;
         }
+        public DataTable ViewPhone(PhoneDirectory phoneDetails)
+        {
+            return repository.view();
+        }
+
 
     }
     class PhoneDirectoryRepository
     {
-        private Phone_directory _directory;
-
-        public PhoneDirectoryRepository(Phone_directory _localDirectory)
+      //  private PhoneDirectory _directory;
+        public string Name { get; private set; }
+        public PhoneDirectoryRepository()
         {
-            _directory=_localDirectory;
+           // _directory=_localDirectory;
         }
-        public string Add()
+        public bool Add(PhoneDirectory directory)
         {
             try
             {
@@ -224,19 +219,30 @@ namespace WindowsFormsApplication2
                     sq.Open();
                     var cmd = new SqlCommand("Insert into phone_dir values(@name,@phone)");
                     cmd.Connection = sq;
-                    cmd.Parameters.AddWithValue("@name",_directory.name);
-                    cmd.Parameters.AddWithValue("@phone",_directory.number);
+                    cmd.Parameters.AddWithValue("@name",directory.name);
+                    cmd.Parameters.AddWithValue("@phone",directory.number);
                     cmd.ExecuteNonQuery();
-                    return "success";
+                    return true;
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                return e.Message;
+                return false;
             }
 
         }
-
+        public DataTable view()
+        {
+            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            {
+                sq.Open();
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
+                DataTable t = new DataTable();
+                _dataadapter.Fill(t);
+                return t;
+               
+            }
+        }
        
         
     }
