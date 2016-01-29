@@ -18,10 +18,6 @@ namespace WindowsFormsApplication2
         {
             InitializeComponent();
         }
-
-       
-      
-
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -42,29 +38,27 @@ namespace WindowsFormsApplication2
                 }
                 else
                 {
-
-                    using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+                    
+                    Business_layer phone_detail = new Business_layer(_name, _number);
+                    String result=phone_detail.ValidateAndAdd();
+                    if (result =="success")
+                        using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+                        {
+                            sq.Open();
+                            SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
+                            DataTable t = new DataTable();
+                            _dataadapter.Fill(t);
+                            dataGridView1.DataSource = t;
+                            Number_Textbox.Clear();
+                            Name_Textbox.Clear();
+                        }
+                    else
                     {
-                        sq.Open();
-                       
-                        var cmd = new SqlCommand("Insert into phone_dir values(@name,@phone)");
-                        cmd.Connection = sq;
-                        cmd.Parameters.AddWithValue("@name", _name);
-                        cmd.Parameters.AddWithValue("@phone", _number);
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show(result);
 
-                        
-
-                        
-                        SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir",sq);
-                        DataTable t = new DataTable();
-                        _dataadapter.Fill(t);
-                        dataGridView1.DataSource = t;
-                        Number_Textbox.Clear();
-                        Name_Textbox.Clear();
                     }
+                  
 
-           
 
                 }
                
@@ -73,9 +67,6 @@ namespace WindowsFormsApplication2
             {
                 MessageBox.Show(e1.Message);
             }
-
-         
-           
         }
 
        
@@ -176,5 +167,77 @@ namespace WindowsFormsApplication2
         {
             label4.Visible = false;
         }
+    }
+    class Phone_directory
+    {
+        public string name;
+        public int number;
+
+        public Phone_directory(String _LocalName,int _LocalNumber)
+        {
+            name = _LocalName;
+            number = _LocalNumber;
+        }
+
+    }
+    class Business_layer
+    {
+        private Phone_directory _directory;
+
+        public Business_layer(String _LocalName, int _LocalNumber)
+        {
+            _directory = new Phone_directory(_LocalName, _LocalNumber);
+        }
+        public string ValidateAndAdd()
+        {
+            String _validateResult=ValidatePhone();
+            if (_validateResult=="successfully validated")
+            {
+                PhoneDirectoryRepository repository = new PhoneDirectoryRepository(_directory);
+                return repository.Add();
+                   
+            }
+            else
+                return _validateResult;
+           
+        }
+        private string ValidatePhone()
+        {
+            return "successfully validated";
+        }
+
+    }
+    class PhoneDirectoryRepository
+    {
+        private Phone_directory _directory;
+
+        public PhoneDirectoryRepository(Phone_directory _localDirectory)
+        {
+            _directory=_localDirectory;
+        }
+        public string Add()
+        {
+            try
+            {
+                using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+                {
+                    sq.Open();
+                    var cmd = new SqlCommand("Insert into phone_dir values(@name,@phone)");
+                    cmd.Connection = sq;
+                    cmd.Parameters.AddWithValue("@name",_directory.name);
+                    cmd.Parameters.AddWithValue("@phone",_directory.number);
+                    cmd.ExecuteNonQuery();
+                    return "success";
+                }
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+
+        }
+
+       
+        
     }
 }
