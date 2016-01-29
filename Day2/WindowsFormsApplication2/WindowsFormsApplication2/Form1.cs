@@ -82,31 +82,44 @@ namespace WindowsFormsApplication2
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int _number;
-            String _name;
-            SqlDataAdapter _dataadapter;
-                
-            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
-            {
-                sq.Open();
-                if(int.TryParse(textBox3.Text,out _number))
-                {
-                    
-                    _dataadapter = new SqlDataAdapter("select * from Phone_dir where Phone=@phone", sq);
-                    _dataadapter.SelectCommand.Parameters.AddWithValue("@phone",_number);
+             BusinessLayer phoneDetail = new BusinessLayer();
+             dataGridView1.DataSource = phoneDetail.Search(textBox3.Text);
 
-                }
-                else
-                {
-                    _name=textBox3.Text;
-                    _dataadapter = new SqlDataAdapter("select * from Phone_dir where Name=@name", sq);
-                    _dataadapter.SelectCommand.Parameters.AddWithValue("@name",_name);
-                }
+             //int _number;
+             //String _name;
 
-                 DataTable t = new DataTable();
-                _dataadapter.Fill(t);
-                dataGridView1.DataSource = t;
-            }
+             //if (int.TryParse(textBox3.Text, out _number))
+             //{
+             //    DataTable t = phoneDetail.Search("select * from Phone_dir where Phone=@phone", _number);
+             //}
+             //else
+             //{
+             //    _name = textBox3.Text;
+             //    DataTable t = phoneDetail.Search("select * from Phone_dir where Name=@phone", _name);
+             //}
+             //SqlDataAdapter _dataadapter;
+
+             //using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+             //{
+             //    sq.Open();
+             //    if (int.TryParse(textBox3.Text, out _number))
+             //    {
+
+             //        _dataadapter = new SqlDataAdapter("select * from Phone_dir where Phone=@phone", sq);
+             //        _dataadapter.SelectCommand.Parameters.AddWithValue("@phone", _number);
+
+             //    }
+             //    else
+             //    {
+             //        _name = textBox3.Text;
+             //        _dataadapter = new SqlDataAdapter("select * from Phone_dir where Name=@name", sq);
+             //        _dataadapter.SelectCommand.Parameters.AddWithValue("@name", _name);
+             //    }
+
+             //    DataTable t = new DataTable();
+             //    _dataadapter.Fill(t);
+             //    dataGridView1.DataSource = t;
+             //}
             textBox3.Clear();
                        
         }
@@ -197,7 +210,11 @@ namespace WindowsFormsApplication2
         }
         public DataTable ViewPhone(PhoneDirectory phoneDetails)
         {
-            return repository.view();
+            return repository.viewAll();
+        }
+        public DataTable Search(String s)
+        {
+
         }
 
 
@@ -231,7 +248,7 @@ namespace WindowsFormsApplication2
             }
 
         }
-        public DataTable view()
+        public DataTable viewAll()
         {
             using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
             {
@@ -243,6 +260,17 @@ namespace WindowsFormsApplication2
                
             }
         }
+        public DataTable Search(string sql,string value)
+        {
+            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
+            {
+                sq.Open();
+                if(int.TryParse(textBox3.Text,out _number))
+                SqlDataAdapter _dataadapter = new SqlDataAdapter(sql, value);
+
+            }
+        }
+      
        
         
     }
