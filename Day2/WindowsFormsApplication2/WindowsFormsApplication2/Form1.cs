@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Threading;
 
 namespace WindowsFormsApplication2
 {
@@ -30,13 +31,14 @@ namespace WindowsFormsApplication2
         {
             try
             {
-
+              
                 String _name = Name_Textbox.Text;
                 int _number;
                 if (!(int.TryParse(Number_Textbox.Text, out _number)))
                 {
-                    MessageBox.Show("Invalid Number");
-                    Number_Textbox.Clear();
+                   // MessageBox.Show("Invalid Number");             
+                      label4.Visible = true;
+                     
                 }
                 else
                 {
@@ -51,23 +53,21 @@ namespace WindowsFormsApplication2
                         cmd.Parameters.AddWithValue("@phone", _number);
                         cmd.ExecuteNonQuery();
 
-                        //SqlCommand command = new SqlCommand("select * from phone_dir",sq);
-                       // var result = command.ExecuteNonQuery();
+                        
 
                         
                         SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir",sq);
-                        DataSet _ds = new DataSet();
-                        _dataadapter.Fill(_ds, "dataGridView1");
-               
-                        dataGridView1.DataSource = _ds;
-                        dataGridView1.DataMember = "dataGridView1";
+                        DataTable t = new DataTable();
+                        _dataadapter.Fill(t);
+                        dataGridView1.DataSource = t;
+                        Number_Textbox.Clear();
+                        Name_Textbox.Clear();
                     }
 
-               
+           
 
                 }
-                Number_Textbox.Clear();
-                Name_Textbox.Clear();
+               
             }
             catch(Exception e1)
             {
@@ -77,6 +77,8 @@ namespace WindowsFormsApplication2
          
            
         }
+
+       
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
@@ -115,12 +117,10 @@ namespace WindowsFormsApplication2
                     _dataadapter = new SqlDataAdapter("select * from Phone_dir where Name=@name", sq);
                     _dataadapter.SelectCommand.Parameters.AddWithValue("@name",_name);
                 }
-        
-                DataSet _ds = new DataSet();
-                _dataadapter.Fill(_ds, "dataGridView1");
 
-                dataGridView1.DataSource = _ds;
-                dataGridView1.DataMember = "dataGridView1";
+                 DataTable t = new DataTable();
+                _dataadapter.Fill(t);
+                dataGridView1.DataSource = t;
             }
             textBox3.Clear();
                        
@@ -128,24 +128,25 @@ namespace WindowsFormsApplication2
 
         private void Name_Textbox_TextChanged(object sender, EventArgs e)
         {
-
+            label4.Visible = false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            label4.Visible = false;
             using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
             {
                 sq.Open();
 
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
-               // DataSet _ds = new DataSet();
+             
                 DataTable t = new DataTable();
                 _dataadapter.Fill(t);
-               // _dataadapter.Fill(_ds, "dataGridView1");
-
-              //  dataGridView1.DataSource = _ds;
-              //  dataGridView1.DataMember = "dataGridView1";
                 dataGridView1.DataSource = t;
+
+
+
+            
             }
 
         }
@@ -154,6 +155,26 @@ namespace WindowsFormsApplication2
         {
             Form1_Load(sender,e);
       
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Number_Textbox_TextChanged(object sender, EventArgs e)
+        {
+            label4.Visible = false;
         }
     }
 }
