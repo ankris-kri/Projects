@@ -138,11 +138,14 @@ namespace WindowsFormsApplication2
                 sq.Open();
 
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
-                DataSet _ds = new DataSet();
-                _dataadapter.Fill(_ds, "dataGridView1");
+               // DataSet _ds = new DataSet();
+                DataTable t = new DataTable();
+                _dataadapter.Fill(t);
+               // _dataadapter.Fill(_ds, "dataGridView1");
 
-                dataGridView1.DataSource = _ds;
-                dataGridView1.DataMember = "dataGridView1";
+              //  dataGridView1.DataSource = _ds;
+              //  dataGridView1.DataMember = "dataGridView1";
+                dataGridView1.DataSource = t;
             }
 
         }
