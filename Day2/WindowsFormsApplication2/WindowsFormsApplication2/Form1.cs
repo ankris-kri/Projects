@@ -149,17 +149,8 @@ namespace WindowsFormsApplication2
 
         private void button3_Click(object sender, EventArgs e)
         {
-            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
-            {
-                sq.Open();
-
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
-                DataSet _ds = new DataSet();
-                _dataadapter.Fill(_ds, "dataGridView1");
-
-                dataGridView1.DataSource = _ds;
-                dataGridView1.DataMember = "dataGridView1";
-            }
+            Form1_Load(sender,e);
+      
         }
     }
 }
