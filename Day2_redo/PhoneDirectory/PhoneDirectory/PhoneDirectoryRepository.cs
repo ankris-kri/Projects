@@ -13,6 +13,7 @@ namespace PhoneDirectory
         PhoneEntryDto result = new PhoneEntryDto();
         ErrorDto error = new ErrorDto();
         string sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
+        /*
         public PhoneEntryDto Search(string input)
         {
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
@@ -26,7 +27,24 @@ namespace PhoneDirectory
                 return result;
             }
         }
-       
+        */
+        public List<PhoneEntry> Search(string input)
+        {
+            List<PhoneEntry> list = new List<PhoneEntry>();
+            using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
+            {
+                sqlConn.Open();
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @input or Number like @input", sqlConn);
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@input", "%" + input + "%");
+                DataTable table = new DataTable();
+                _dataadapter.Fill(table);
+                foreach (DataRow row in table.Rows)
+                {
+                    list.Add(new PhoneEntry(row["Name"].ToString(),(long)Convert.ToDouble(row["Number"])));
+                }
+                return list;
+            }
+        }
         public ErrorDto Add(PhoneEntry phoneEntry)
         {
             try

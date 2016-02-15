@@ -9,16 +9,22 @@ namespace PhoneDirectory
     class BusinessLayer
     {
         PhoneDirectoryRepository repository = new PhoneDirectoryRepository();
-        public PhoneEntryDto Search(String _enteredstring)
+        /*
+        public PhoneEntryDto Search(String inputstring)
         {
-            return repository.Search(_enteredstring);
+            return repository.Search(inputstring);
         }
-        public ErrorDto Add(PhoneEntry phonedirectory)
+        */
+        public List<PhoneEntry> Search(String inputstring)
         {
-            ErrorDto error = Validate(phonedirectory.number);
+            return repository.Search(inputstring);
+        }
+        public ErrorDto Add(PhoneEntry phoneEntry)
+        {
+            ErrorDto error = Validate(phoneEntry.number);
             if (error.isError == false)
             {
-                return repository.Add(phonedirectory);
+                return repository.Add(phoneEntry);
             }
             return error;
         }
