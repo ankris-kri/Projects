@@ -18,8 +18,6 @@ namespace WindowsFormsApplication2
         {
             InitializeComponent();
         }
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -30,8 +28,7 @@ namespace WindowsFormsApplication2
                 if (!(int.TryParse(Number_Textbox.Text, out _number)))
                 {
                    // MessageBox.Show("Invalid Number");             
-                      label4.Visible = true;
-                     
+                      label4.Visible = true;   
                 }
                 else
                 {
@@ -40,31 +37,21 @@ namespace WindowsFormsApplication2
                     bool result=phoneDetail.ValidateAndAdd(phone);
                     if (result == true)
                     {    
-                         
                         dataGridView1.DataSource = phoneDetail.ViewPhone(phone);
                         Number_Textbox.Clear();
                         Name_Textbox.Clear();
                     }
-                        
                     else
                     {
                         MessageBox.Show("cannot be Added");
-
                     }
-                  
-
-
                 }
-               
             }
             catch(Exception e1)
             {
                 MessageBox.Show(e1.Message);
             }
         }
-
-       
-
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
@@ -135,24 +122,15 @@ namespace WindowsFormsApplication2
             using (SqlConnection sq = new SqlConnection("Server=localhost;Database=phone_directory;Trusted_Connection=true"))
             {
                 sq.Open();
-
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM phone_dir", sq);
-             
                 DataTable t = new DataTable();
                 _dataadapter.Fill(t);
                 dataGridView1.DataSource = t;
-
-
-
-            
             }
-
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             Form1_Load(sender,e);
-      
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -188,21 +166,16 @@ namespace WindowsFormsApplication2
     }
     class BusinessLayer
     {
-  
         public PhoneDirectoryRepository repository=new PhoneDirectoryRepository();
-
-       
         public bool ValidateAndAdd(PhoneDirectory phoneDetails)
         {
             bool _validateResult=ValidatePhone();
             if (_validateResult==true)
             {
                 return repository.Add(phoneDetails);
-                   
             }
             else
                 return false;
-           
         }
         private bool ValidatePhone()
         {
@@ -216,8 +189,6 @@ namespace WindowsFormsApplication2
         {
 
         }
-
-
     }
     class PhoneDirectoryRepository
     {
@@ -257,7 +228,6 @@ namespace WindowsFormsApplication2
                 DataTable t = new DataTable();
                 _dataadapter.Fill(t);
                 return t;
-               
             }
         }
         public DataTable Search(string sql,string value)
@@ -267,7 +237,6 @@ namespace WindowsFormsApplication2
                 sq.Open();
                 if(int.TryParse(textBox3.Text,out _number))
                 SqlDataAdapter _dataadapter = new SqlDataAdapter(sql, value);
-
             }
         }
       

@@ -21,8 +21,8 @@ namespace PhoneDirectory
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-           Result result= businesslayer.Search();
-            dataGridView1.DataSource = result.value;
+            PhoneEntryDto result = businesslayer.Search(null);
+            dataGridView1.DataSource = result.Table;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -31,14 +31,14 @@ namespace PhoneDirectory
                 MessageBox.Show("invalid number");
             else
             {
-                PhoneDirectory phonedirectory = new PhoneDirectory(textBox1.Text, _number);
-                Error error = businesslayer.Add(phonedirectory);
-                if (error.iserror)
+                PhoneEntry phonedirectory = new PhoneEntry(textBox1.Text, _number);
+                ErrorDto error = businesslayer.Add(phonedirectory);
+                if (error.isError)
                     MessageBox.Show(error.description);
                 else
                 {
-                    Result result = businesslayer.Search();
-                    dataGridView1.DataSource = result.value;
+                    PhoneEntryDto result = businesslayer.Search(null);
+                    dataGridView1.DataSource = result.Table;
                     textBox1.Clear();
                     textBox2.Clear();
                 }
@@ -46,8 +46,8 @@ namespace PhoneDirectory
         }
         private void textBox3_KeyUp(object sender, KeyEventArgs e)
         {
-            Result result = businesslayer.Search(textBox3.Text);
-            dataGridView1.DataSource = result.value;
+            PhoneEntryDto result = businesslayer.Search(textBox3.Text);
+            dataGridView1.DataSource = result.Table;
            
         }
 

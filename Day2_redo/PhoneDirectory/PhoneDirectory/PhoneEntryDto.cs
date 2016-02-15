@@ -8,8 +8,8 @@ using System.Data.SqlClient;
 
 namespace PhoneDirectory
 {
-    class Result
+    class PhoneEntryDto
     {
-        public DataTable value;
+        public DataTable Table;
     }
 }

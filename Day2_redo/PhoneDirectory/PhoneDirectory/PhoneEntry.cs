@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory
 {
-    class PhoneDirectory
+    class PhoneEntry
     {
         public string name;
         public long number;
-        public PhoneDirectory(String _LocalName, long _LocalNumber)
+        public PhoneEntry(String nameArg, long numberArg)
         {
-            name = _LocalName;
-            number = _LocalNumber;
+            name = nameArg;
+            number = numberArg;
         }
     }
 }

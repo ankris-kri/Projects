@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory
 {
-    class Error
+    class ErrorDto
     {
-        public bool iserror;
+        public bool isError;
         public String description;
     }
 }
