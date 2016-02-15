@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Configuration;
 
 namespace PhoneDirectory
 {
@@ -55,132 +55,6 @@ namespace PhoneDirectory
         {
             Form1_Load(sender, e);
             textBox3.Text = "";
-        }
-    }
-    class PhoneDirectory
-    {
-        public string name;
-        public long number;
-        public PhoneDirectory(String _LocalName, long _LocalNumber)
-        {
-            name = _LocalName;
-            number = _LocalNumber;
-        }
-    }
-    class Result
-    {
-        public DataTable value;
-    }
-    class Error
-    {
-        public bool iserror;
-        public String description;
-    }
-    class BusinessLayer
-    {
-        Repository repository = new Repository();
-        public Result Search(String _enteredstring="")
-        {
-            int _number;
-            if(_enteredstring=="")
-                return repository.SearchAll();
-            else if (int.TryParse(_enteredstring, out _number))
-            {
-                return repository.SearchByNumber(_number);
-            }
-            else
-            {   
-                return repository.SearchByName(_enteredstring);
-            }
-        }
-        public Error Add(PhoneDirectory phonedirectory)
-        {
-           Error error= Validate(phonedirectory.number);
-            if (error.iserror==false)
-            {
-               return repository.Add(phonedirectory);
-            }
-            return error;
-        }
-        public Error Validate(long _number)
-        {
-            Error error = new Error();
-            if (_number.ToString().Length != 10)
-            {
-                error.iserror = true;
-                error.description = "number should be of length 10";
-            }
-            else
-                error.iserror = false;
-            return error;
-        }
-    }
-    class Repository
-    {
-        Result result = new Result();
-        Error error = new Error();
-        string sql = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
-   
-        public Result SearchAll()
-        {
-            using (SqlConnection sq = new SqlConnection(sql))
-            {
-                sq.Open();
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM PhoneDirectory", sq);
-                DataTable t = new DataTable();
-                _dataadapter.Fill(t);
-                result.value = t;
-                return result;
-            }
-        }
-        public Result SearchByName(String _name)
-        {
-            using (SqlConnection sq=new SqlConnection(sql))
-            {
-                sq.Open();  
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @phone", sq);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone","%"+_name+"%");
-                DataTable t = new DataTable();
-                _dataadapter.Fill(t);
-                result.value = t;
-                return result;
-            }
-        }
-        public Result SearchByNumber(int _number)
-        {
-            using (SqlConnection sq = new SqlConnection(sql))
-            {
-                sq.Open();
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Number like @phone", sq);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone","%"+_number+"%");
-                DataTable t = new DataTable();
-                _dataadapter.Fill(t);
-                result.value = t;
-                return result;
-            }
-        }
-        public Error Add(PhoneDirectory phonedirectory)
-        {
-            try
-            {
-                using (SqlConnection sq = new SqlConnection(sql))
-                {
-                    sq.Open();
-                    var cmd = new SqlCommand("Insert into PhoneDirectory values(@name,@phone)");
-                    cmd.Connection = sq;
-                    cmd.Parameters.AddWithValue("@name", phonedirectory.name);
-                    cmd.Parameters.AddWithValue("@phone", phonedirectory.number);
-                    cmd.ExecuteNonQuery();
-                    error.iserror = false;
-                    return error;
-                }
-            }
-            catch (Exception e)
-            {
-                error.iserror = true;
-                error.description = e.ToString();
-                return error;
-            }
         }
     }
 }
