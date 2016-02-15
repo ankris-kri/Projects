@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace PhoneDirectory
 {
     public partial class Form1 : Form
@@ -118,9 +119,11 @@ namespace PhoneDirectory
     {
         Result result = new Result();
         Error error = new Error();
+        string sql = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
+   
         public Result SearchAll()
         {
-            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=Krishna;Trusted_Connection=true"))
+            using (SqlConnection sq = new SqlConnection(sql))
             {
                 sq.Open();
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("SELECT * FROM PhoneDirectory", sq);
@@ -132,11 +135,11 @@ namespace PhoneDirectory
         }
         public Result SearchByName(String _name)
         {
-            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=Krishna;Trusted_Connection=true"))
+            using (SqlConnection sq=new SqlConnection(sql))
             {
-                sq.Open();
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name=@phone", sq);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone",_name);
+                sq.Open();  
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @phone", sq);
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone","%"+_name+"%");
                 DataTable t = new DataTable();
                 _dataadapter.Fill(t);
                 result.value = t;
@@ -145,11 +148,11 @@ namespace PhoneDirectory
         }
         public Result SearchByNumber(int _number)
         {
-            using (SqlConnection sq = new SqlConnection("Server=localhost;Database=Krishna;Trusted_Connection=true"))
+            using (SqlConnection sq = new SqlConnection(sql))
             {
                 sq.Open();
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Number=@phone", sq);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone", _number);
+                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Number like @phone", sq);
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@phone","%"+_number+"%");
                 DataTable t = new DataTable();
                 _dataadapter.Fill(t);
                 result.value = t;
@@ -160,7 +163,7 @@ namespace PhoneDirectory
         {
             try
             {
-                using (SqlConnection sq = new SqlConnection("Server=localhost;Database=Krishna;Trusted_Connection=true"))
+                using (SqlConnection sq = new SqlConnection(sql))
                 {
                     sq.Open();
                     var cmd = new SqlCommand("Insert into PhoneDirectory values(@name,@phone)");
