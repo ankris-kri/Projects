@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLayer.cs" />
+    <Compile Include="BusinessLayer\BusinessLayer.cs" />
     <Compile Include="ErrorDto.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
