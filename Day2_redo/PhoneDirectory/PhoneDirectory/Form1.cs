@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Configuration;
+
 
 namespace PhoneDirectory
 {
@@ -21,8 +13,7 @@ namespace PhoneDirectory
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            // PhoneEntryDto result = businesslayer.Search(null);
-            // dataGridView1.DataSource = result.Table;
+            dataGridView1.ReadOnly = true;           
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "Name";
             dataGridView1.Columns[1].Name = "Number";
@@ -41,8 +32,6 @@ namespace PhoneDirectory
                     MessageBox.Show(error.description);
                 else
                 {
-                    //PhoneEntryDto result = businesslayer.Search(null);
-                    //dataGridView1.DataSource = result.Table;
                     grid_view(null);
                     textBox1.Clear();
                     textBox2.Clear();
@@ -51,8 +40,6 @@ namespace PhoneDirectory
         }
         private void textBox3_KeyUp(object sender, KeyEventArgs e)
         {
-            //PhoneEntryDto result = businesslayer.Search(textBox3.Text);
-            //dataGridView1.DataSource = result.Table;
             grid_view(textBox3.Text);
         }
         private void grid_view(String inputArg)
