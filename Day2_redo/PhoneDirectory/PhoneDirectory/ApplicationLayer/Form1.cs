@@ -23,7 +23,6 @@ namespace PhoneDirectory
             dataGridView1.Columns[0].Name = "Name";
             dataGridView1.Columns[1].Name = "Number";
             grid_view(null);
-
         }
 
         private void button1_Click(object sender, EventArgs e)

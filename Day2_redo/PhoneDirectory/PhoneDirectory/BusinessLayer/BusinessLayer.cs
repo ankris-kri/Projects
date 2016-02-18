@@ -15,7 +15,7 @@ namespace PhoneDirectory
             keypadDictionary = new KeypadDictionary();
             error = new ErrorDto();
         }   
-        public List<PhoneEntry> Search(string searchBy ,String inputString)
+        public List<PhoneEntry> Search(string searchBy ,string inputString)
         {
             string keypadMatch=null;
             if (searchBy == "Number")

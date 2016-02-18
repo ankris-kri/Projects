@@ -16,8 +16,8 @@ namespace PhoneDirectory
             error = new ErrorDto();
             sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         }
-        
-        public List<PhoneEntry> Search(string input)
+
+        public List<PhoneEntry> Search(string searchBy, string inputString, string keypadMatch)
         {
             List<PhoneEntry> list = new List<PhoneEntry>();
 
@@ -26,7 +26,7 @@ namespace PhoneDirectory
                 sqlConn.Open();
 
                 SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @input or Number like @input", sqlConn);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@input", "%" + input + "%");
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@input", "%" + inputString + "%");
 
                 DataTable table = new DataTable();
                 _dataadapter.Fill(table);
@@ -54,15 +54,13 @@ namespace PhoneDirectory
                     cmd.Parameters.AddWithValue("@name", phoneEntry.name);
                     cmd.Parameters.AddWithValue("@phone", phoneEntry.number);
                     cmd.ExecuteNonQuery();
-                    return error;
                 }
                 catch (Exception e)
                 {
                     error.isError = true;
                     error.description = e.ToString();
-                    return error;
                 }
-                
+                return error;
             }
           
         }
