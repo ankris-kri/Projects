@@ -8,9 +8,14 @@ namespace PhoneDirectory
     //access modifiers in all class files
     class PhoneDirectoryRepository
     {
-        string sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
-
-        ErrorDto error = new ErrorDto();
+        public string sqlConnectionString { get; set; }
+        public string baseQuery { get; set; }
+        public ErrorDto error{ get; set; }
+        public PhoneDirectoryRepository()
+        {
+            error = new ErrorDto();
+            sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
+        }
         
         public List<PhoneEntry> Search(string input)
         {
@@ -36,9 +41,10 @@ namespace PhoneDirectory
         }
         public ErrorDto Add(PhoneEntry phoneEntry)
         {
-            try
+           
+            using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
-                using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
+                try
                 {
                     sqlConn.Open();
 
@@ -47,19 +53,18 @@ namespace PhoneDirectory
 
                     cmd.Parameters.AddWithValue("@name", phoneEntry.name);
                     cmd.Parameters.AddWithValue("@phone", phoneEntry.number);
-
                     cmd.ExecuteNonQuery();
-
-                   // set it by default-- error.isError = true;
                     return error;
                 }
+                catch (Exception e)
+                {
+                    error.isError = true;
+                    error.description = e.ToString();
+                    return error;
+                }
+                
             }
-            catch (Exception e)
-            {
-                error.isError = true;
-                error.description = e.ToString();
-                return error;
-            }
+          
         }
     }
 }

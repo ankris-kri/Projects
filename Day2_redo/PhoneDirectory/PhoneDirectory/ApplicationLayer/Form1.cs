@@ -1,24 +1,31 @@
 ﻿using System;
 using System.Windows.Forms;
 
-
 namespace PhoneDirectory
 {
     public partial class Form1 : Form
     {
-        private BusinessLayer businesslayer = new BusinessLayer();
+        public string searchBy { get; set; }
+        private BusinessLayer businessLayer = new BusinessLayer();
+
         public Form1()
         {
             InitializeComponent();
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            comboBox1.SelectedItem = "Name";
+            searchBy = "Name";
+
             dataGridView1.ReadOnly = true;           
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "Name";
             dataGridView1.Columns[1].Name = "Number";
             grid_view(null);
+
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             long _number;
@@ -27,9 +34,12 @@ namespace PhoneDirectory
             else
             {
                 PhoneEntry phonedirectory = new PhoneEntry(textBox1.Text, _number);
-                ErrorDto error = businesslayer.Add(phonedirectory);
+                ErrorDto error = businessLayer.Add(phonedirectory);
                 if (error.isError)
+                {
                     MessageBox.Show(error.description);
+                    error.isError = false;
+                }
                 else
                 {
                     grid_view(null);
@@ -38,23 +48,32 @@ namespace PhoneDirectory
                 }
             }
         }
+
         private void textBox3_KeyUp(object sender, KeyEventArgs e)
         {
+
             grid_view(textBox3.Text);
         }
+
         private void grid_view(String inputArg)
         {
             dataGridView1.Rows.Clear();
-            var result = businesslayer.Search(inputArg);
+            var result = businessLayer.Search(searchBy,inputArg);
             foreach (PhoneEntry phoneEntry in result)
             {
                 dataGridView1.Rows.Add(phoneEntry.name, phoneEntry.number);
             }
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Form1_Load(sender, e);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
             textBox3.Text = "";
+            searchBy = comboBox1.SelectedItem.ToString();
         }
     }
 }

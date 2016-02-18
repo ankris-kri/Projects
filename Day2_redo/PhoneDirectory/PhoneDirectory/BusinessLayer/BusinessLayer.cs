@@ -5,32 +5,39 @@ namespace PhoneDirectory
 {
     class BusinessLayer
     {
-        PhoneDirectoryRepository repository = new PhoneDirectoryRepository();
-   
-        public List<PhoneEntry> Search(String inputstring)
+        public PhoneDirectoryRepository repository { get; set; }
+        public KeypadDictionary keypadDictionary { get; set; }
+        public ErrorDto error { get; set; }
+
+        public BusinessLayer()
         {
-            return repository.Search(inputstring);
+            repository = new PhoneDirectoryRepository();
+            keypadDictionary = new KeypadDictionary();
+            error = new ErrorDto();
+        }   
+        public List<PhoneEntry> Search(string searchBy ,String inputString)
+        {
+            string keypadMatch=null;
+            if (searchBy == "Number")
+                keypadMatch=keypadDictionary.StringGenerator(inputString);
+            return repository.Search(searchBy,inputString,keypadMatch);
         }
         public ErrorDto Add(PhoneEntry phoneEntry)
         {
-            ErrorDto error = Validate(phoneEntry.number);
+             Validate(phoneEntry.number);
             if (error.isError == false)
             {
                 return repository.Add(phoneEntry);
             }
             return error;
         }
-        public ErrorDto Validate(long _number)
+        public void Validate(long _number)
         {
-            ErrorDto error = new ErrorDto();
             if (_number.ToString().Length != 10)
             {
                 error.isError = true;
                 error.description = "number should be of length 10";
             }
-            else
-                error.isError = false;
-            return error;
         }
     }
 }
