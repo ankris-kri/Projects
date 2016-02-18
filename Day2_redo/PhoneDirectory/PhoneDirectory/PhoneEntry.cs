@@ -11,5 +11,12 @@ namespace PhoneDirectory
             name = nameArg;
             number = numberArg;
         }
+        public bool IsValidNumber()
+        {
+            if (number.ToString().Length < 10)
+                return false;
+            else
+                return true;
+        }
     }
 }

@@ -17,27 +17,24 @@ namespace PhoneDirectory
         }   
         public List<PhoneEntry> Search(string searchBy ,string inputString)
         {
-            string keypadMatch=null;
+            string searchName="";
+            string searchNumber="";       
             if (searchBy == "Number")
-                keypadMatch=keypadDictionary.StringGenerator(inputString);
-            return repository.Search(searchBy,inputString,keypadMatch);
+            {
+                searchName= keypadDictionary.StringGenerator(inputString);
+                searchNumber = inputString;
+            }
+            if(searchBy=="Name")
+            {
+                searchName = inputString;
+                searchNumber =" ";         // if assigned null then which searching, all the datas will be printed
+            }
+
+            return repository.Search(searchNumber, searchName);
         }
         public ErrorDto Add(PhoneEntry phoneEntry)
         {
-             Validate(phoneEntry.number);
-            if (error.isError == false)
-            {
-                return repository.Add(phoneEntry);
-            }
-            return error;
-        }
-        public void Validate(long _number)
-        {
-            if (_number.ToString().Length != 10)
-            {
-                error.isError = true;
-                error.description = "number should be of length 10";
-            }
+            return repository.Add(phoneEntry);
         }
     }
 }

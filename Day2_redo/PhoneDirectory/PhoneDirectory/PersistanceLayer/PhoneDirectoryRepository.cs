@@ -5,11 +5,9 @@ using System.Data.SqlClient;
 
 namespace PhoneDirectory
 {
-    //access modifiers in all class files
     class PhoneDirectoryRepository
     {
         public string sqlConnectionString { get; set; }
-        public string baseQuery { get; set; }
         public ErrorDto error{ get; set; }
         public PhoneDirectoryRepository()
         {
@@ -17,31 +15,30 @@ namespace PhoneDirectory
             sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         }
 
-        public List<PhoneEntry> Search(string searchBy, string inputString, string keypadMatch)
+        public List<PhoneEntry> Search(string searchNumber, string searchName)
         {
             List<PhoneEntry> list = new List<PhoneEntry>();
-
+           
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
-                sqlConn.Open();
+                sqlConn.Open();                   
+                var _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @name or number like @number", sqlConn);
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@name", "%" + searchName + "%");
+                _dataadapter.SelectCommand.Parameters.AddWithValue("@number", "%" + searchNumber + "%");
 
-                SqlDataAdapter _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @input or Number like @input", sqlConn);
-                _dataadapter.SelectCommand.Parameters.AddWithValue("@input", "%" + inputString + "%");
-
-                DataTable table = new DataTable();
+                var table = new DataTable();
                 _dataadapter.Fill(table);
 
                 foreach (DataRow row in table.Rows)
                 {
                     list.Add(new PhoneEntry(row["Name"].ToString(),(long)Convert.ToDouble(row["Number"])));
                 }
-
+    
                 return list;
             }
         }
         public ErrorDto Add(PhoneEntry phoneEntry)
         {
-           
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
                 try
@@ -50,7 +47,6 @@ namespace PhoneDirectory
 
                     var cmd = new SqlCommand("Insert into PhoneDirectory values(@name,@phone)");
                     cmd.Connection = sqlConn;
-
                     cmd.Parameters.AddWithValue("@name", phoneEntry.name);
                     cmd.Parameters.AddWithValue("@phone", phoneEntry.number);
                     cmd.ExecuteNonQuery();
@@ -62,7 +58,6 @@ namespace PhoneDirectory
                 }
                 return error;
             }
-          
         }
     }
 }
