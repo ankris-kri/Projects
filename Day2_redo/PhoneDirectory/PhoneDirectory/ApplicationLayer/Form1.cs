@@ -30,7 +30,7 @@ namespace PhoneDirectory
         private void button1_Click(object sender, EventArgs e)
         {
             long _number;
-            if (!(long.TryParse(textBox2.Text, out _number)))
+            if ((!(long.TryParse(textBox2.Text, out _number))) | _number==0)
             {
                 MessageBox.Show("Invalid Number");
             }

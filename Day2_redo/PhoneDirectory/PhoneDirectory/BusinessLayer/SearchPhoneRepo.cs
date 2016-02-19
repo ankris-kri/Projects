@@ -6,32 +6,31 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory
 {
-    class Search
+    class SearchPhoneRepo
     {
         public PhoneDirectoryRepository phoneRepository { get; set; }
         public KeypadMapping numToNameMapping { get; set; }
 
-        public Search()
+        public SearchPhoneRepo()
         {
             phoneRepository = new PhoneDirectoryRepository();
             numToNameMapping = new KeypadMapping();
         }
-        public List<PhoneEntry> SearchPhoneDirectory(string searchBy, string inputString)
+        public List<PhoneEntry> Search(string searchBy, string inputString)
         {
-            string searchName="";
-            string searchNumber="";       
+            string searchName;
+            string searchNumber;       
             if (searchBy == "Number")
             {
                 searchName = numToNameMapping.StringGenerator(inputString);
                 searchNumber = inputString;
+                return phoneRepository.Search(searchBy, searchName,searchNumber);
             }
-            if(searchBy=="Name")
+            else
             {
                 searchName = inputString;
-                searchNumber =" ";        
+                return phoneRepository.Search(searchBy, searchName);
             }
-
-            return phoneRepository.Search(searchNumber, searchName);
         }
     }
 }

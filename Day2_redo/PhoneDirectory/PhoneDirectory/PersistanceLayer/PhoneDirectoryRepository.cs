@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PhoneDirectory
 {
@@ -16,15 +17,21 @@ namespace PhoneDirectory
             sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         }
 
-        public List<PhoneEntry> Search(string searchNumber, string searchName)
+        public List<PhoneEntry> Search(string searchBy,string searchName,string searchNumber=null)
         {
-            List<PhoneEntry> phoneEntrylist = new List<PhoneEntry>();
-           
+            var phoneEntrylist = new List<PhoneEntry>();
+            string BaseQuery="select * from PhoneDirectory";
+            string searchQuery;
+
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
-                sqlConn.Open();                   
+                sqlConn.Open();                 
+                if (searchBy=="Number")
+                    searchQuery=BaseQuery+" "+"where Name like @name or Number like @number";
+                else
+                    searchQuery = BaseQuery + " " + "where Name like @name";
 
-                var _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @name or number like @number", sqlConn);
+                var _dataadapter = new SqlDataAdapter(searchQuery, sqlConn);
                 _dataadapter.SelectCommand.Parameters.AddWithValue("@name", "%" + searchName + "%");
                 _dataadapter.SelectCommand.Parameters.AddWithValue("@number", "%" + searchNumber + "%");
 
@@ -35,7 +42,9 @@ namespace PhoneDirectory
                 {
                     phoneEntrylist.Add(new PhoneEntry(row["Name"].ToString(), (long)Convert.ToDouble(row["Number"])));
                 }
-                return phoneEntrylist;
+          
+                var orderedList =phoneEntrylist.OrderBy(x => x.name).ToList();
+                return orderedList;
             }
         }
         public ErrorValidation Add(PhoneEntry phoneEntry)
@@ -51,14 +60,6 @@ namespace PhoneDirectory
                     cmd.Parameters.AddWithValue("@name", phoneEntry.name);
                     cmd.Parameters.AddWithValue("@phone", phoneEntry.number);
                     cmd.ExecuteNonQuery();
-                }
-                catch(SqlException sqlex)
-                {
-                    if(sqlex.Number == 2627)
-                    {
-                        validation.isError = true;
-                        validation.description = "This Number already prsents in the Directory";
-                    }
                 }
                 catch (Exception e)
                 {

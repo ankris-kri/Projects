@@ -48,10 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLayer\Add.cs" />
+    <Compile Include="BusinessLayer\UpdatePhoneRepo.cs" />
     <Compile Include="BusinessLayer\BusinessLayer.cs" />
     <Compile Include="BusinessLayer\KeypadMapping.cs" />
-    <Compile Include="BusinessLayer\Search.cs" />
+    <Compile Include="BusinessLayer\SearchPhoneRepo.cs" />
     <Compile Include="ExceptionLayer\ErrorValidation.cs" />
     <Compile Include="ApplicationLayer\Form1.cs">
       <SubType>Form</SubType>
