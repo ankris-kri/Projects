@@ -34,7 +34,7 @@ namespace PhoneDirectory
             {
                 MessageBox.Show("Invalid Number");
             }
-            else if(string.IsNullOrWhiteSpace(textBox1.Text))
+            else if (string.IsNullOrWhiteSpace(textBox1.Text) | textBox1.Text.StartsWith(" "))
             {
                 MessageBox.Show("Invalid Name");
             }
@@ -97,8 +97,6 @@ namespace PhoneDirectory
             Form1_Load(sender, e);
             comboBox1.SelectedItem = beforeLoad;
             searchBy = beforeLoad;
-            
-
         }
 
         private void button2_Click(object sender, EventArgs e)
