@@ -5,36 +5,26 @@ namespace PhoneDirectory
 {
     class BusinessLayer
     {
-        public PhoneDirectoryRepository repository { get; set; }
-        public KeypadDictionary keypadDictionary { get; set; }
-        public ErrorDto error { get; set; }
+
+        public ErrorValidation validation { get; set; }
+        public Search businessLayerSearch { get; set; }
+        public Add businessLayerAdd { get; set; }
 
         public BusinessLayer()
         {
-            repository = new PhoneDirectoryRepository();
-            keypadDictionary = new KeypadDictionary();
-            error = new ErrorDto();
-        }   
-        public List<PhoneEntry> Search(string searchBy ,string inputString)
-        {
-            string searchName="";
-            string searchNumber="";       
-            if (searchBy == "Number")
-            {
-                searchName= keypadDictionary.StringGenerator(inputString);
-                searchNumber = inputString;
-            }
-            if(searchBy=="Name")
-            {
-                searchName = inputString;
-                searchNumber =" ";         // if assigned null then which searching, all the datas will be printed
-            }
 
-            return repository.Search(searchNumber, searchName);
+            validation = new ErrorValidation();
+            businessLayerSearch = new Search();
+            businessLayerAdd = new Add();
         }
-        public ErrorDto Add(PhoneEntry phoneEntry)
+        public List<PhoneEntry> SearchDictionary(string searchBy, string inputString)
         {
-            return repository.Add(phoneEntry);
+            return businessLayerSearch.SearchPhoneDirectory(searchBy,inputString);
+            
+        }
+        public ErrorValidation AddToDictionary(PhoneEntry phoneEntry)
+        {
+            return businessLayerAdd.AddToDictionary(phoneEntry);
         }
     }
 }

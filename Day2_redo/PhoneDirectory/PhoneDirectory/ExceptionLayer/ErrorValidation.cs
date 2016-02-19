@@ -2,12 +2,12 @@
 
 namespace PhoneDirectory
 {
-    class ErrorDto
+    class ErrorValidation
     {
         public bool isError { get; set; }
         public string description { get; set; }
 
-        public ErrorDto()
+        public ErrorValidation()
         {
             isError = false;
         }

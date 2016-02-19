@@ -8,20 +8,22 @@ namespace PhoneDirectory
     class PhoneDirectoryRepository
     {
         public string sqlConnectionString { get; set; }
-        public ErrorDto error{ get; set; }
+        public ErrorValidation validation { get; set; }
+
         public PhoneDirectoryRepository()
         {
-            error = new ErrorDto();
+            validation = new ErrorValidation();
             sqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         }
 
         public List<PhoneEntry> Search(string searchNumber, string searchName)
         {
-            List<PhoneEntry> list = new List<PhoneEntry>();
+            List<PhoneEntry> phoneEntrylist = new List<PhoneEntry>();
            
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
                 sqlConn.Open();                   
+
                 var _dataadapter = new SqlDataAdapter("select * from PhoneDirectory where Name like @name or number like @number", sqlConn);
                 _dataadapter.SelectCommand.Parameters.AddWithValue("@name", "%" + searchName + "%");
                 _dataadapter.SelectCommand.Parameters.AddWithValue("@number", "%" + searchNumber + "%");
@@ -31,13 +33,12 @@ namespace PhoneDirectory
 
                 foreach (DataRow row in table.Rows)
                 {
-                    list.Add(new PhoneEntry(row["Name"].ToString(),(long)Convert.ToDouble(row["Number"])));
+                    phoneEntrylist.Add(new PhoneEntry(row["Name"].ToString(), (long)Convert.ToDouble(row["Number"])));
                 }
-    
-                return list;
+                return phoneEntrylist;
             }
         }
-        public ErrorDto Add(PhoneEntry phoneEntry)
+        public ErrorValidation Add(PhoneEntry phoneEntry)
         {
             using (SqlConnection sqlConn = new SqlConnection(sqlConnectionString))
             {
@@ -51,12 +52,20 @@ namespace PhoneDirectory
                     cmd.Parameters.AddWithValue("@phone", phoneEntry.number);
                     cmd.ExecuteNonQuery();
                 }
+                catch(SqlException sqlex)
+                {
+                    if(sqlex.Number == 2627)
+                    {
+                        validation.isError = true;
+                        validation.description = "This Number already prsents in the Directory";
+                    }
+                }
                 catch (Exception e)
                 {
-                    error.isError = true;
-                    error.description = e.ToString();
+                    validation.isError = true;
+                    validation.description = e.ToString();
                 }
-                return error;
+                return validation;
             }
         }
     }
