@@ -29,6 +29,7 @@ namespace PhoneDirectory
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox3.Clear();
             long _number;
             if ((!(long.TryParse(textBox2.Text, out _number))) | _number==0)
             {
