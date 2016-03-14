@@ -1,18 +1,8 @@
-﻿@model IEnumerable<PhysicianRecord.Models.DataToView>
-@using PhysicianRecord.Models;
+﻿@model PhysicianRecord.Models.DataToView
+
 @{
     ViewBag.Title = "Index";
 }
 
-@foreach(DataToView data in Model)
-{
-  <br />  @data.Age
-    <br />@data.ConsultationCharge;
-    <br />@data.Hospital;;
-    <br />@data.NPI;
-    <br />@data.Specialty;
-    <br />  @data.ID;
-    <br /> @data.Name;
-}
-
+<h2>Index</h2>
 
