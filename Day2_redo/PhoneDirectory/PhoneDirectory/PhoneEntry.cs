@@ -13,7 +13,7 @@ namespace PhoneDirectory
         }
         public bool IsValidNumber()
         {
-            if (number.ToString().Length < 10)
+            if (number.ToString().Length != 10)
                 return false;
             else
                 return true;

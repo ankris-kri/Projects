@@ -7,7 +7,7 @@ namespace PhoneDirectory
     {
         public string searchBy { get; set; }
         private BusinessLayer businessLayer = new BusinessLayer();
-        private ErrorDto error { get; set; }
+        private ErrorValidation validation { get; set; }
 
         public Form1()
         {
@@ -24,32 +24,36 @@ namespace PhoneDirectory
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "Name";
             dataGridView1.Columns[1].Name = "Number";
-            grid_view(null);
+            gridDisplay(null);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox3.Clear();
             long _number;
-            if (!(long.TryParse(textBox2.Text, out _number)))
+            if ((!(long.TryParse(textBox2.Text, out _number))) | _number==0)
             {
                 MessageBox.Show("Invalid Number");
             }
+            else if (string.IsNullOrWhiteSpace(textBox1.Text) | textBox1.Text.StartsWith(" "))
+            {
+                MessageBox.Show("Invalid Name");
+            }
             else
             {
-                var phonedirectory = new PhoneEntry(textBox1.Text, _number);
-                if (phonedirectory.IsValidNumber())
+                var _phoneEntry = new PhoneEntry(textBox1.Text, _number);
+                if (_phoneEntry.IsValidNumber())
                 {
-                    error = businessLayer.Add(phonedirectory);
-                    if (error.isError)
+                    validation = businessLayer.AddToDictionary(_phoneEntry);
+                    if (validation.isError)
                     {
-                        MessageBox.Show(error.description);
-                        error.isError = false;
+                        MessageBox.Show(validation.description);
+                        validation.isError = false;
                     }
                     else
                     {
-                        grid_view(null);
-                        textBox1.Clear();
-                        textBox2.Clear();
+                        gridDisplay(null);
+                        button2_Click(sender,e);
                     }
                 }
                 else
@@ -62,17 +66,17 @@ namespace PhoneDirectory
             long dummyNumber;
             if (searchBy=="Number" && (!(long.TryParse(textBox3.Text, out dummyNumber))))
             {
+                if(!(textBox3.Text==""))
                 MessageBox.Show("Invalid Number");
-                textBox3.Clear();
             }
             else
-                grid_view(textBox3.Text);
+                gridDisplay(textBox3.Text);
         }
 
-        private void grid_view(String inputArg)
+        private void gridDisplay(String inputArg)
         {
             dataGridView1.Rows.Clear();
-            var result = businessLayer.Search(searchBy,inputArg);
+            var result = businessLayer.SearchDictionary(searchBy,inputArg);
             foreach (PhoneEntry phoneEntry in result)
             {
                 dataGridView1.Rows.Add(phoneEntry.name, phoneEntry.number);
@@ -80,18 +84,26 @@ namespace PhoneDirectory
             dataGridView1.ClearSelection();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Form1_Load(sender, e);
-            textBox1.Clear();
-            textBox2.Clear();
-            textBox3.Clear();
-        }
-
+      
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox3.Text = "";
             searchBy = comboBox1.SelectedItem.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox3.Clear();
+            string beforeLoad= searchBy;
+            Form1_Load(sender, e);
+            comboBox1.SelectedItem = beforeLoad;
+            searchBy = beforeLoad;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            textBox2.Clear();
         }
     }
 }
