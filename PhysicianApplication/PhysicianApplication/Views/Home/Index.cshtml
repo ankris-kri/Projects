@@ -1,0 +1,62 @@
+﻿@model IEnumerable<PhysicianApplication.Models.DataToView>
+@using PhysicianApplication.Models;
+@{
+    ViewBag.Title = "Index";
+}
+<div>
+    @Html.ActionLink("CREATE","Create");
+</div>
+<div>
+    <table>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                NPI
+            </th>
+            <th>
+                Specialty
+            </th>
+            <th>
+                Hospital
+            </th>
+            <th>
+                Consultation Fee
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+        @foreach (DataToView data in Model)
+        {
+            <tr>
+                <td>
+                    @data.Name
+                </td>
+                <td>
+                    @data.Age
+                </td>
+                <td>
+                    @data.NPI
+                </td>
+                <td>
+                    @data.Specialty
+                </td>
+                <td>
+                    @data.Hospital
+                </td>
+                <td>
+                    @data.ConsultationCharge
+                </td>
+                <td>
+                    @Html.ActionLink("EDIT", "Edit", new {id=@data.ID})
+                    @Html.ActionLink("DELETE", "Delete", new { id = @data.ID })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
