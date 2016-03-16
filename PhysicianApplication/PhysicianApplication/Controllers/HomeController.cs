@@ -12,9 +12,11 @@ namespace PhysicianApplication.Controllers
     {
         private TableToViewMapService tableToViewMapService = new TableToViewMapService();
         private IEnumerable<DataToView> dataToView;
+        
 
         public ActionResult Index()
         {
+            
             dataToView = tableToViewMapService.GetFullRecord();
             return View(dataToView);
         }
@@ -34,10 +36,8 @@ namespace PhysicianApplication.Controllers
         {
             DataFetchContext dataFetchContext = new DataFetchContext();
             var toEditRecord = dataFetchContext.Physicians.Single(x => x.ID == id);
-        
-            ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
             ViewBag.HospitalRecord = dataFetchContext.Hospitals;
-
+            ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
             return View("Form", toEditRecord);
         }
 
@@ -49,13 +49,29 @@ namespace PhysicianApplication.Controllers
                 context.Physicians.Attach(a);
                 context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
-                return RedirectToAction("Index");
             }
+             return RedirectToAction("Index");
         }
-        <
+        [HttpGet]
         public ActionResult Create()
         {
-
+            DataFetchContext dataFetchContext = new DataFetchContext();
+            ViewBag.HospitalRecord = dataFetchContext.Hospitals;
+            ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
+            return View("Form",new Physician());
+        }
+        [HttpPost]
+        public ActionResult Create(Physician a)
+        {
+            using (var context = new DataFetchContext())
+            {
+                a.ID = null;
+                context.Physicians.Attach(a);
+                context.Physicians.Remove(a);
+                context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
+                context.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
