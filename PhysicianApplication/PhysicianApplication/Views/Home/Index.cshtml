@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<PhysicianApplication.Models.DataToView>
+<script type="text/javascript" src="@Url.Content("/Scripts/DeleteConfirmation.js")"></script>
 @using PhysicianApplication.Models;
 @{
     ViewBag.Title = "Index";
@@ -53,8 +54,10 @@
                     @data.ConsultationCharge
                 </td>
                 <td>
+                   
                     @Html.ActionLink("EDIT", "Edit", new {id=@data.ID})
-                    @Html.ActionLink("DELETE", "Delete", new { id = @data.ID })
+                    @Html.ActionLink("DELETE", "Delete", new { id = @data.ID }, new { onclick = " return ConfirmDelete();" })
+                  @*  @Html.ActionLink("DELETE", "Delete", new { id = @data.ID })*@
                 </td>
             </tr>
         }

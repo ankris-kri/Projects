@@ -36,7 +36,7 @@ namespace PhysicianApplication.Service
             }
             return dataToView;
         }
-        public DataToView GetRecordForId(int id)
+        public DataToView GetRecordForId(Guid id)
         {
             var fullRecord = GetFullRecord();
             var singleRecord = dataToView.SingleOrDefault(data => data.ID == id);

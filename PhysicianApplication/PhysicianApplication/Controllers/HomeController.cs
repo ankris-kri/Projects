@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PhysicianApplication.Service;
+using System.Net;
+using System.Net.Http;
 
 namespace PhysicianApplication.Controllers
 {
@@ -16,23 +18,18 @@ namespace PhysicianApplication.Controllers
 
         public ActionResult Index()
         {
-            
             dataToView = tableToViewMapService.GetFullRecord();
             return View(dataToView);
         }
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
-            using(var context=new DataFetchContext())
-            {
-                var PhysicianList = context.Physicians.ToList<Physician>();
-                context.Physicians.Remove(PhysicianList.First(a=>a.ID==id));
-                context.SaveChanges();
-            }
+            DeleteService deleteEntry = new DeleteService();
+            deleteEntry.DeleteForID(id);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             DataFetchContext dataFetchContext = new DataFetchContext();
             var toEditRecord = dataFetchContext.Physicians.Single(x => x.ID == id);
@@ -46,12 +43,23 @@ namespace PhysicianApplication.Controllers
         {
             using (var context = new DataFetchContext())
             {
-                context.Physicians.Attach(a);
-                context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
+                if(ModelState.IsValid)
+                {
+                    context.Physicians.Attach(a);
+                    context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    DataFetchContext dataFetchContext = new DataFetchContext();
+                    ViewBag.HospitalRecord = dataFetchContext.Hospitals;
+                    ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
+                    return View("Form", a);
+                }
             }
-             return RedirectToAction("Index");
         }
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -60,18 +68,28 @@ namespace PhysicianApplication.Controllers
             ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
             return View("Form",new Physician());
         }
+
         [HttpPost]
         public ActionResult Create(Physician a)
         {
             using (var context = new DataFetchContext())
             {
-                a.ID = null;
-                context.Physicians.Attach(a);
-                context.Physicians.Remove(a);
-                context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
-            }
-            return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    a.ID = Guid.NewGuid();
+                    context.Physicians.Add(a);
+                    context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Added;
+                    context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    DataFetchContext dataFetchContext = new DataFetchContext();
+                    ViewBag.HospitalRecord = dataFetchContext.Hospitals;
+                    ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
+                    return View("Form", a);
+                }
+            } 
         }
     }
 }

@@ -2,8 +2,11 @@
 @using PhysicianApplication.Models;
 @model PhysicianApplication.Models.Physician
 
+
+
 @using(Html.BeginForm())
 {
+     @Html.ValidationSummary(true) 
     <fieldset>
     <legend>Physician</legend>
       
@@ -13,19 +16,23 @@
         @Html.Label("Name")
     </div>
     <div class="editor-field">
-         @Html.TextBoxFor(model=>model.Name)   
+         @Html.TextBoxFor(model=>model.Name)
+         @Html.ValidationMessageFor(model=>model.Name)   
     </div>
     <div class="editor-label">
         @Html.Label("Age")
     </div>
     <div class="editor-field">
         @Html.TextBoxFor(model => model.Age)
+        @Html.ValidationMessageFor(model => model.Age)
     </div>
     <div class="editor-label">
         @Html.Label("NPI")
     </div>
     <div class="editor-field">
         @Html.TextBoxFor(model => model.NPI)
+        @Html.ValidationMessageFor(model => model.NPI)
+        
     </div>
     <div class="editor-label">
         @Html.Label("Hospital")
@@ -44,6 +51,7 @@
     </div>
     <div class="editor-field">
         @Html.TextBoxFor(model=>model.ConsultationCharge)
+        @Html.ValidationMessageFor(model => model.ConsultationCharge)
     </div>
     <input type="submit" value="SUBMIT"/>
     </fieldset>
