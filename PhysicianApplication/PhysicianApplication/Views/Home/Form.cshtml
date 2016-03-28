@@ -1,62 +1,61 @@
 ﻿@using System.Linq;
-@using PhysicianApplication.Models;
-@model PhysicianApplication.Models.Physician
+
+@model PhysicianApplication.Physician
 
 
-
-@using(Html.BeginForm())
+@using (Html.BeginForm())
 {
-     @Html.ValidationSummary(true) 
+    @Html.ValidationSummary(true)
     <fieldset>
-    <legend>Physician</legend>
-      
-        @Html.HiddenFor(model=>model.ID)
+        <legend>Physician</legend>
 
-    <div class="editor-label">
-        @Html.Label("Name")
-    </div>
-    <div class="editor-field">
-         @Html.TextBoxFor(model=>model.Name)
-         @Html.ValidationMessageFor(model=>model.Name)   
-    </div>
-    <div class="editor-label">
-        @Html.Label("Age")
-    </div>
-    <div class="editor-field">
-        @Html.TextBoxFor(model => model.Age)
-        @Html.ValidationMessageFor(model => model.Age)
-    </div>
-    <div class="editor-label">
-        @Html.Label("NPI")
-    </div>
-    <div class="editor-field">
-        @Html.TextBoxFor(model => model.NPI)
-        @Html.ValidationMessageFor(model => model.NPI)
-        
-    </div>
-    <div class="editor-label">
-        @Html.Label("Hospital")
-    </div>
-    <div class="editor-field">
-        @Html.DropDownListFor(model => model.HospitalID,new SelectList(ViewBag.HospitalRecord,"HospitalID","HospitalName"))
-    </div>
-    <div class="editor-label">
-        @Html.Label("Specialty")
-    </div>
-    <div class="editor-field">
-        @Html.DropDownListFor(model => model.SpecialtyID, new SelectList(ViewBag.SpecialtyRecord,"SpecialtyID","SpecialtyName"))
-    </div>    
-    <div class="editor-label">
-        @Html.Label("Consultation Charge")
-    </div>
-    <div class="editor-field">
-        @Html.TextBoxFor(model=>model.ConsultationCharge)
-        @Html.ValidationMessageFor(model => model.ConsultationCharge)
-    </div>
-    <input type="submit" value="SUBMIT"/>
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="editor-label">
+            @Html.Label("Name")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+        <div class="editor-label">
+            @Html.Label("Age")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.Age)
+            @Html.ValidationMessageFor(model => model.Age)
+        </div>
+        <div class="editor-label">
+            @Html.Label("NPI")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.NPI)
+            @Html.ValidationMessageFor(model => model.NPI)
+
+        </div>
+        <div class="editor-label">
+            @Html.Label("Hospital")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.HospitalID, new SelectList(ViewBag.HospitalRecord, "HospitalID", "HospitalName"))
+        </div>
+        <div class="editor-label">
+            @Html.Label("Specialty")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.SpecialtyID, new SelectList(ViewBag.SpecialtyRecord, "SpecialtyID", "SpecialtyName"))
+        </div>
+        <div class="editor-label">
+            @Html.Label("Consultation Charge")
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.ConsultationCharge)
+            @Html.ValidationMessageFor(model => model.ConsultationCharge)
+        </div>
+        <input type="submit" value="SUBMIT" />
     </fieldset>
 }
-    
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
