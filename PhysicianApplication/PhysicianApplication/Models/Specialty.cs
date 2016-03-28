@@ -10,6 +10,8 @@ namespace PhysicianApplication.Models
     public class Specialty
     {
         public int SpecialtyID { get; set; }
-        public String SpecialtyName { get; set; }
+        public string SpecialtyName { get; set; }
+
+        public virtual ICollection<Physician> Physicians { get; set; }
     }
 }
