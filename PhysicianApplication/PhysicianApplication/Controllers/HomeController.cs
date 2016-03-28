@@ -1,5 +1,4 @@
-﻿using PhysicianApplication.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,38 +11,39 @@ namespace PhysicianApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private TableToViewMapService tableToViewMapService = new TableToViewMapService();
-        private IEnumerable<DataToView> dataToView;
-        
+        PhysicianEntities context;
+        PhysicianViewService physicianViewService;
+        PhysicianDeleteService physicianDeleteService;
 
         public ActionResult Index()
         {
-            dataToView = tableToViewMapService.GetFullRecord();
+            physicianViewService = new PhysicianViewService();
+            var dataToView = physicianViewService.ViewAllPhysicians();
             return View(dataToView);
         }
         public ActionResult Delete(Guid id)
         {
-            DeleteService deleteEntry = new DeleteService();
-            deleteEntry.DeleteForID(id);
+            physicianDeleteService = new PhysicianDeleteService();
+            physicianDeleteService.DeleteForID(id);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
-            DataFetchContext dataFetchContext = new DataFetchContext();
-            var toEditRecord = dataFetchContext.Physicians.Single(x => x.ID == id);
-            ViewBag.HospitalRecord = dataFetchContext.Hospitals;
-            ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
+            context = new PhysicianEntities();
+            var toEditRecord = context.Physicians.Single(x => x.ID == id);
+            ViewBag.HospitalRecord = context.Hospitals;
+            ViewBag.SpecialtyRecord = context.Specialties;
             return View("Form", toEditRecord);
         }
 
         [HttpPost]
         public ActionResult Edit(Physician a)
         {
-            using (var context = new DataFetchContext())
+            using (context = new PhysicianEntities())
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     context.Physicians.Attach(a);
                     context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
@@ -52,9 +52,8 @@ namespace PhysicianApplication.Controllers
                 }
                 else
                 {
-                    DataFetchContext dataFetchContext = new DataFetchContext();
-                    ViewBag.HospitalRecord = dataFetchContext.Hospitals;
-                    ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
+                    ViewBag.HospitalRecord = context.Hospitals;
+                    ViewBag.SpecialtyRecord = context.Specialties;
                     return View("Form", a);
                 }
             }
@@ -63,16 +62,16 @@ namespace PhysicianApplication.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            DataFetchContext dataFetchContext = new DataFetchContext();
-            ViewBag.HospitalRecord = dataFetchContext.Hospitals;
-            ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
-            return View("Form",new Physician());
+            var context = new PhysicianEntities();
+            ViewBag.HospitalRecord = context.Hospitals;
+            ViewBag.SpecialtyRecord = context.Specialties;
+            return View("Form");
         }
 
         [HttpPost]
         public ActionResult Create(Physician a)
         {
-            using (var context = new DataFetchContext())
+            using (context = new PhysicianEntities())
             {
                 if (ModelState.IsValid)
                 {
@@ -84,12 +83,12 @@ namespace PhysicianApplication.Controllers
                 }
                 else
                 {
-                    DataFetchContext dataFetchContext = new DataFetchContext();
+                    var dataFetchContext = new PhysicianEntities();
                     ViewBag.HospitalRecord = dataFetchContext.Hospitals;
                     ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
                     return View("Form", a);
                 }
-            } 
+            }
         }
     }
 }
