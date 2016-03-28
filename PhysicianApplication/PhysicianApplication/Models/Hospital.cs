@@ -9,7 +9,10 @@ namespace PhysicianApplication.Models
     [Table("Hospital")]
     public class Hospital
     {
+       
         public int HospitalID { get; set; }
-        public String HospitalName { get; set; }
+        public string HospitalName { get; set; }
+
+        public virtual ICollection<Physician> Physicians { get; set; }
     }
 }
