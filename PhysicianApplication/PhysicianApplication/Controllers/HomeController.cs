@@ -7,11 +7,12 @@ using PhysicianApplication.Service;
 using System.Net;
 using System.Net.Http;
 
+
 namespace PhysicianApplication.Controllers
 {
     public class HomeController : Controller
     {
-        PhysicianEntities context;
+        DataFetchContext context;
         PhysicianViewService physicianViewService;
         PhysicianDeleteService physicianDeleteService;
 

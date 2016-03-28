@@ -127,8 +127,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DataFetchContext.cs" />
-    <Compile Include="Models\DataToView.cs" />
+    <Compile Include="DAL\DataFetchContext.cs" />
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\Physician.cs" />
     <Compile Include="Models\Specialty.cs" />
