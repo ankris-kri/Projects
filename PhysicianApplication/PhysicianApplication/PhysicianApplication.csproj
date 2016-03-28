@@ -121,6 +121,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IPhysicianDeleteService.cs" />
+    <Compile Include="Contracts\IPhysicianViewService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -131,8 +133,9 @@
     <Compile Include="Models\Physician.cs" />
     <Compile Include="Models\Specialty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\DeleteService.cs" />
-    <Compile Include="Service\TableToViewMapService.cs" />
+    <Compile Include="Service\PhysicianDeleteService.cs" />
+    <Compile Include="Service\PhysicianEditService.cs" />
+    <Compile Include="Service\PhysicianViewService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -153,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Contracts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
