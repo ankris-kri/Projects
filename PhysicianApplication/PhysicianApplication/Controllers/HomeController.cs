@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using PhysicianApplication.Service;
 using System.Net;
 using System.Net.Http;
+using PhysicianApplication.Models;
 
 
 namespace PhysicianApplication.Controllers
@@ -32,7 +33,7 @@ namespace PhysicianApplication.Controllers
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
-            context = new PhysicianEntities();
+            context = new DataFetchContext();
             var toEditRecord = context.Physicians.Single(x => x.ID == id);
             ViewBag.HospitalRecord = context.Hospitals;
             ViewBag.SpecialtyRecord = context.Specialties;
@@ -42,7 +43,7 @@ namespace PhysicianApplication.Controllers
         [HttpPost]
         public ActionResult Edit(Physician a)
         {
-            using (context = new PhysicianEntities())
+            using (context = new DataFetchContext())
             {
                 if (ModelState.IsValid)
                 {
@@ -63,7 +64,7 @@ namespace PhysicianApplication.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var context = new PhysicianEntities();
+            var context = new DataFetchContext();
             ViewBag.HospitalRecord = context.Hospitals;
             ViewBag.SpecialtyRecord = context.Specialties;
             return View("Form");
@@ -72,7 +73,7 @@ namespace PhysicianApplication.Controllers
         [HttpPost]
         public ActionResult Create(Physician a)
         {
-            using (context = new PhysicianEntities())
+            using (context = new DataFetchContext())
             {
                 if (ModelState.IsValid)
                 {
@@ -84,7 +85,7 @@ namespace PhysicianApplication.Controllers
                 }
                 else
                 {
-                    var dataFetchContext = new PhysicianEntities();
+                    var dataFetchContext = new DataFetchContext();
                     ViewBag.HospitalRecord = dataFetchContext.Hospitals;
                     ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
                     return View("Form", a);

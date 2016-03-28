@@ -4,16 +4,17 @@ using System.Linq;
 using System.Web;
 using PhysicianApplication;
 using PhysicianApplication.Contracts;
+using PhysicianApplication.Models;
 
 namespace PhysicianApplication.Service
 {
     public class PhysicianDeleteService : IPhysicianDeleteService
     {
-        PhysicianEntities context;
+        DataFetchContext context;
 
         public PhysicianDeleteService()
         {
-            context = new PhysicianEntities();
+            context = new DataFetchContext();
         }
         public void DeleteForID(Guid id)
         {
