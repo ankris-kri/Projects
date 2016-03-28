@@ -43,21 +43,24 @@ namespace PhysicianApplication.Controllers
         [HttpPost]
         public ActionResult Edit(Physician a)
         {
-            using (context = new DataFetchContext())
+            
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                using (context = new DataFetchContext())
                 {
                     context.Physicians.Attach(a);
                     context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    ViewBag.HospitalRecord = context.Hospitals;
-                    ViewBag.SpecialtyRecord = context.Specialties;
-                    return View("Form", a);
-                }
+            }
+            else
+            {
+                context = new DataFetchContext();
+                ViewBag.HospitalRecord = context.Hospitals;
+                ViewBag.SpecialtyRecord = context.Specialties;
+                return View("Form", a);
+                
             }
         }
 
@@ -71,11 +74,12 @@ namespace PhysicianApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Physician a)
+        public ActionResult Create([Bind(Exclude = "ID")] Physician a)
         {
-            using (context = new DataFetchContext())
-            {
-                if (ModelState.IsValid)
+           
+            if (ModelState.IsValid)
+            {        
+                using (context = new DataFetchContext())
                 {
                     a.ID = Guid.NewGuid();
                     context.Physicians.Add(a);
@@ -83,13 +87,13 @@ namespace PhysicianApplication.Controllers
                     context.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    var dataFetchContext = new DataFetchContext();
-                    ViewBag.HospitalRecord = dataFetchContext.Hospitals;
-                    ViewBag.SpecialtyRecord = dataFetchContext.Specialties;
-                    return View("Form", a);
-                }
+            }
+            else
+            {
+                context = new DataFetchContext();
+                ViewBag.HospitalRecord = context.Hospitals;
+                ViewBag.SpecialtyRecord = context.Specialties;
+                return View("Form", a);
             }
         }
     }
