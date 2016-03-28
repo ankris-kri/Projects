@@ -10,16 +10,23 @@ namespace PhysicianApplication.Models
     [Table("Physician")]
     public class Physician
     {
-        public Guid ID { get; set; }
-        [Required][RegularExpression("^[a-zA-Z0-9]+[a-zA-Z0-9 ]*",ErrorMessage="No special characters")]
-        public String Name { get; set; }
-        [Required][Range(26, 79)]
+        public System.Guid ID { get; set; }
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9]+[a-zA-Z0-9 ]*", ErrorMessage = "No special characters")]
+        public string Name { get; set; }
+        [Required]
+        [Range(26, 79)]
         public int Age { get; set; }
-        [Required][RegularExpression("^[a-zA-Z0-9]{4,10}$", ErrorMessage = "No special characters")]
-        public String NPI { get; set; }
+        [Required]
+        [RegularExpression("^[a-zA-Z0-9]{4,10}$", ErrorMessage = "No special characters")]
+        public string NPI { get; set; }
         public int HospitalID { get; set; }
         public int SpecialtyID { get; set; }
-        [Required][RegularExpression(@"[1-9][0-9]*(.[0-9]{1,2})?",ErrorMessage="enter a valid number")]
+        [Required]
+        [RegularExpression(@"[1-9][0-9]*(.[0-9]{1,2})?", ErrorMessage = "enter a valid number")]
         public decimal ConsultationCharge { get; set; }
+
+        public virtual Hospital Hospital { get; set; }
+        public virtual Specialty Specialty { get; set; }
     }
 }
