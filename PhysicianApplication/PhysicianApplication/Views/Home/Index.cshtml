@@ -1,11 +1,13 @@
-﻿@model IEnumerable<PhysicianApplication.Models.DataToView>
-<script type="text/javascript" src="@Url.Content("/Scripts/DeleteConfirmation.js")"></script>
+﻿@model IEnumerable<PhysicianApplication.Models.Physician>
 @using PhysicianApplication.Models;
+<script type="text/javascript" src="@Url.Content("/Scripts/DeleteConfirmation.js")"></script>
+
 @{
     ViewBag.Title = "Index";
 }
+
 <div>
-    @Html.ActionLink("CREATE","Create")
+    @Html.ActionLink("CREATE", "Create")
 </div>
 <div>
     <table>
@@ -32,7 +34,7 @@
                 Action
             </th>
         </tr>
-        @foreach (DataToView data in Model)
+        @foreach (Physician data in Model)
         {
             <tr>
                 <td>
@@ -45,19 +47,17 @@
                     @data.NPI
                 </td>
                 <td>
-                    @data.Specialty
+                    @data.Specialty.SpecialtyName
                 </td>
                 <td>
-                    @data.Hospital
+                    @data.Hospital.HospitalName
                 </td>
                 <td>
                     @data.ConsultationCharge
                 </td>
                 <td>
-                   
-                    @Html.ActionLink("EDIT", "Edit", new {id=@data.ID})
+                    @Html.ActionLink("EDIT", "Edit", new { id = @data.ID })
                     @Html.ActionLink("DELETE", "Delete", new { id = @data.ID }, new { onclick = " return ConfirmDelete();" })
-                  @*  @Html.ActionLink("DELETE", "Delete", new { id = @data.ID })*@
                 </td>
             </tr>
         }
