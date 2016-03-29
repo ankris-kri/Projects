@@ -16,7 +16,7 @@ namespace PhysicianApplication
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            Database.SetInitializer<PhysicianApplication.Models.DataFetchContext>(null);
+            Database.SetInitializer<PhysicianApplication.DAL.DataFetchContext>(null);
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

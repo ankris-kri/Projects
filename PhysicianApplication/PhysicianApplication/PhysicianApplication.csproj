@@ -122,12 +122,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IPhysicianDeleteService.cs" />
+    <Compile Include="Contracts\IPhysicianEditService.cs" />
     <Compile Include="Contracts\IPhysicianViewService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DAL\DataFetchContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="DAL\DataFetchContext.cs" />
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\Physician.cs" />
     <Compile Include="Models\Specialty.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using PhysicianApplication.Contracts;
 using PhysicianApplication.Models;
+using PhysicianApplication.DAL;
 
 namespace PhysicianApplication.Service
 {

@@ -5,6 +5,7 @@ using System.Web;
 using PhysicianApplication;
 using PhysicianApplication.Contracts;
 using PhysicianApplication.Models;
+using PhysicianApplication.DAL;
 
 namespace PhysicianApplication.Service
 {

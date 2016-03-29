@@ -7,6 +7,7 @@ using PhysicianApplication.Service;
 using System.Net;
 using System.Net.Http;
 using PhysicianApplication.Models;
+using PhysicianApplication.DAL;
 
 
 namespace PhysicianApplication.Controllers
@@ -16,6 +17,7 @@ namespace PhysicianApplication.Controllers
         DataFetchContext context;
         PhysicianViewService physicianViewService;
         PhysicianDeleteService physicianDeleteService;
+        PhysicianEditService physicianEditService;
 
         public ActionResult Index()
         {
@@ -41,26 +43,22 @@ namespace PhysicianApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Physician a)
+        public ActionResult Edit(Physician _physicianEntry)
         {
             
             if (ModelState.IsValid)
             {
-                using (context = new DataFetchContext())
-                {
-                    context.Physicians.Attach(a);
-                    context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Modified;
-                    context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                physicianEditService = new PhysicianEditService();
+                physicianEditService.Edit(_physicianEntry);
+                return RedirectToAction("Index");
             }
             else
             {
                 context = new DataFetchContext();
                 ViewBag.HospitalRecord = context.Hospitals;
                 ViewBag.SpecialtyRecord = context.Specialties;
-                return View("Form", a);
-                
+                return View("Form", _physicianEntry);
+               
             }
         }
 
@@ -74,26 +72,21 @@ namespace PhysicianApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Exclude = "ID")] Physician a)
+        public ActionResult Create([Bind(Exclude = "ID")] Physician _physicianEntry)
         {
            
             if (ModelState.IsValid)
-            {        
-                using (context = new DataFetchContext())
-                {
-                    a.ID = Guid.NewGuid();
-                    context.Physicians.Add(a);
-                    context.Entry<Physician>(a).State = System.Data.Entity.EntityState.Added;
-                    context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+            {
+                physicianEditService = new PhysicianEditService();
+                physicianEditService.Create(_physicianEntry);
+                return RedirectToAction("Index");
             }
             else
             {
                 context = new DataFetchContext();
                 ViewBag.HospitalRecord = context.Hospitals;
                 ViewBag.SpecialtyRecord = context.Specialties;
-                return View("Form", a);
+                return View("Form", _physicianEntry);
             }
         }
     }
